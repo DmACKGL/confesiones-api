@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql= require('mysql');
 var http = require('http');
+var Raven = require('raven');
 var RateLimit = require('express-rate-limit');
 const auth = require('http-auth');
 const basic = auth.basic({realm: 'Area Monitoreo'}, function(user, pass, callback) {
@@ -14,8 +15,10 @@ const basic = auth.basic({realm: 'Area Monitoreo'}, function(user, pass, callbac
 
 var index = require('./routes/index');
 var confesiones = require('./routes/confesiones');
-
 var app = express();
+
+Raven.config('https://dcac80ecd65347549f6f246b1de6240a@sentry.io/1215621').install();
+app.use(Raven.requestHandler());
 
 // Rates
 app.enable('trust proxy');
@@ -40,10 +43,15 @@ app.use(function(req, res, next){
 	global.connection = mysql.createConnection({
 	  	host     : '138.122.227.11',
 	  	user     : 'replica',
-			password : '',
+			password : '13251325C',
   		database : 'confesiones'
 	});
 	connection.connect();
+  connection.on('error', function(error) {
+    Raven.captureException(error)
+    throw new Error('ERROR: Error en Connection.on')
+    res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
+  });
 	next();
 });
 
@@ -64,6 +72,7 @@ app.use(function(err, req, res, next) {
 
   res.status(err.status || 500);
   res.render('error');
+  res.end(res.sentry + '\n');
 });
 
 module.exports = app;
