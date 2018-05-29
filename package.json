@@ -1,0 +1,21 @@
+{
+  "name": "confesiones-api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "debug": "*",
+    "ejs": "*",
+    "express": "*",
+    "express-rate-limit": "^2.11.0",
+    "express-status-monitor": "^1.0.1",
+    "http-auth": "^3.2.3",
+    "morgan": "*",
+    "mysql": "*",
+    "serve-favicon": "*"
+  }
+}
