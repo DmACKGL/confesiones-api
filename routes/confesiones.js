@@ -11,9 +11,9 @@ var postconfe = new RateLimit({
    message: "Ya posteaste una confesion, vuelve a postear en 1 hora"
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
 	try {
-		connection.query('SELECT * from confesiones', function (error, results, fields) {
+		connection.query('SELECT * from confesiones', function (error, results) {
 		  	if(error){
 					Raven.captureException(error);
 		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
@@ -28,14 +28,14 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/', postconfe, function(req, res, next) {
+router.post('/', postconfe, function(req, res) {
 	// Vacio
 	if(Object.keys(req.body).length === 0 || !req.body.titulo || !req.body.confesion) {
   	res.send(JSON.stringify({"status": 500, "error": "Sin datos", "response": null}));
 		return false;
 	}
 	try{
-		connection.query("INSERT INTO `confesiones` (`id`, `titulo`, `confesion`, `fecha`) VALUES (NULL, '"+req.body.titulo+"', '"+req.body.confesion+"', CURRENT_TIME())", function (error, results, fields) {
+		connection.query("INSERT INTO `confesiones` (`id`, `titulo`, `confesion`, `fecha`) VALUES (NULL, '"+req.body.titulo+"', '"+req.body.confesion+"', CURRENT_TIME())", function (error, results) {
 			if(error){
 				Raven.captureException(error);
 				res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
