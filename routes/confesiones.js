@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Raven = require('raven');
 var RateLimit = require('express-rate-limit');
+var cache = require('memory-cache');
 
 var postconfe = new RateLimit({
 	 windowMs: 5*60*1000,
@@ -13,14 +14,8 @@ var postconfe = new RateLimit({
 
 router.get('/', function(req, res) {
 	try {
-		connection.query('SELECT * from confesiones', function (error, results) {
-		  	if(error){
-					Raven.captureException(error);
-		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
-		  	} else {
-	  			res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-		  	}
-	  	});
+		results = cache.get('CacheConfesiones');
+		res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
 	}catch (error) {
 		Raven.captureException(error)
     res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
@@ -41,6 +36,17 @@ router.post('/', postconfe, function(req, res) {
 				res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
 			} else {
 				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+				try {
+					connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
+							if(error){
+								Raven.captureException(error);
+							} else {
+								cache.put('CacheConfesiones', results);
+							}
+					});
+				}catch (error) {
+					Raven.captureException(error)
+				}
 			}
 		});
 	}catch (error) {

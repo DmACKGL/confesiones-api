@@ -7,7 +7,11 @@ var bodyParser = require('body-parser');
 var mysql= require('mysql');
 var http = require('http');
 var Raven = require('raven');
+var minify = require('express-minify');
+var cache = require('memory-cache');
+var compression = require('compression')
 const auth = require('http-auth');
+const _httpErrorPages = require('http-error-pages');
 const basic = auth.basic({realm: 'Area Monitoreo'}, function(user, pass, callback) {
   callback(user === 'confesiones' && pass === '####');
 });
@@ -18,6 +22,9 @@ var app = express();
 
 Raven.config('https://dcac80ecd65347549f6f246b1de6240a@sentry.io/1215621').install();
 app.use(Raven.requestHandler());
+
+app.use(compression());
+app.use(minify());
 
 // Rates
 app.enable('trust proxy');
@@ -73,6 +80,29 @@ app.use(function(err, req, res) {
   res.end(res.sentry + '\n');
 });
 
+
 module.exports = app;
 var server = http.createServer(app);
 server.listen(4001);
+
+// Cache
+global.connection = mysql.createConnection({
+		host     : '138.122.227.11',
+		user     : 'replica',
+		password : '13251325CD',
+		database : 'confesiones'
+});
+connection.connect();
+setInterval(function() {
+	try {
+		connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
+				if(error){
+					Raven.captureException(error);
+				} else {
+					cache.put('CacheConfesiones', results);
+				}
+		});
+	}catch (error) {
+		Raven.captureException(error)
+	}
+}, 5000);

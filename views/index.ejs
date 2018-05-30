@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/ConnorAtherton/loaders.css/master/loaders.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Assistant" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css" rel="stylesheet" />
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
     <title><%= title %></title>
   </head>
   <body>
@@ -34,23 +38,49 @@
         </div>
       </nav>
       <h1 class="text-center"><%= title %></h1>
-      <div class="row" id="contenido">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">HOLA</h5>
-              <p class="card-text">Quiero confesar que...</p>
-              <a href="#" class="btn btn-primary">Reaccion 1</a>
-              <a href="#" class="btn btn-primary">Reaccion 2</a>
-              <a href="#" class="btn btn-primary">Reaccion 3</a>
-            </div>
-          </div>
+      <div class="row justify-content-center">
+        <button type="button" class="btn btn-outline-primary text-center" data-toggle="modal" data-target="#confesarModal" ><i class="fas fa-pencil-alt"></i> Confesar</button>
+      </div>
+      <div class="modal fade" id="confesarModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        	<div class="modal-content">
+        		<div class="modal-header">
+        			<h5 class="modal-title">Escribir Confesion</h5>
+        			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        			<span aria-hidden="true">&times;</span>
+        			</button>
+        		</div>
+            <form id="confesar">
+          		<div class="modal-body">
+        				<div class="form-group">
+        					<label for="recipient-name" class="col-form-label">Titulo:</label>
+        					<input type="text" name="titulo" class="form-control" id="confesion-titulo">
+        				</div>
+        				<div class="form-group">
+        					<label for="message-text" class="col-form-label">Confesion:</label>
+        					<textarea class="form-control" name="confesion" id="confesion-texto"></textarea>
+        				</div>
+          		</div>
+          		<div class="modal-footer">
+          			<button type="submit">Confesar</button>
+          		</div>
+            </form>
+        	</div>
         </div>
+      </div>
+      </br>
+      <div class="row" id="contenido">
+      </div>
     </div>
-
+    <footer class="footer">
+      <div class="container text-center">
+        <span class="text-muted">Version: <b><%= version %></b></span>
+      </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <script src="js/script.js"></script>
   </body>
 </html>
