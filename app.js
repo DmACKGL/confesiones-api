@@ -11,7 +11,7 @@ var minify = require('express-minify');
 var cache = require('memory-cache');
 var compression = require('compression')
 const auth = require('http-auth');
-const _httpErrorPages = require('http-error-pages');
+
 const basic = auth.basic({realm: 'Area Monitoreo'}, function(user, pass, callback) {
   callback(user === 'confesiones' && pass === '####');
 });
