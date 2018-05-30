@@ -92,23 +92,23 @@ var server = http.createServer(app);
 server.listen(8080);
 
 // Cache
-global.connection = mysql.createConnection({
+global.connectioncache = mysql.createConnection({
   host: '138.122.227.11',
   user: 'replica',
   password: '13251325CD',
   database: 'confesiones'
 });
-connection.connect();
+connectioncache.connect();
 setInterval(function() {
   try {
-    connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
+    connectioncache.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
       if (error) {
         Raven.captureException(error);
       } else {
         cache.put('CacheConfesiones', results);
       }
     });
-    connection.end();
+    connectioncache.end();
   } catch (error) {
     Raven.captureException(error)
   }
