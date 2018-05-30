@@ -47,7 +47,6 @@ router.post('/', postconfe, function(req, res) {
 				}catch (error) {
 					Raven.captureException(error)
 				}
-				connection.end();
 			}
 		});
 	}catch (error) {

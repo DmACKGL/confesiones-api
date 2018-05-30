@@ -106,7 +106,6 @@ setInterval(function() {
         Raven.captureException(error);
       } else {
         cache.put('CacheConfesiones', results);
-        connectioncache.end();
       }
     });
   } catch (error) {
