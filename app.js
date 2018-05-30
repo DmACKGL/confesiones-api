@@ -42,7 +42,7 @@ app.use(function(req, res, next){
 	global.connection = mysql.createConnection({
 	  	host     : '138.122.227.11',
 	  	user     : 'replica',
-			password : '13251325C',
+			password : '13251325CD',
   		database : 'confesiones'
 	});
 	connection.connect();

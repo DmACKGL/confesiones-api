@@ -4,11 +4,11 @@ var Raven = require('raven');
 var RateLimit = require('express-rate-limit');
 
 var postconfe = new RateLimit({
-	windowMs: 5*60*1000,
+	 windowMs: 5*60*1000,
    delayAfter: 1,
    delayMs: 3*1000,
    max: 1,
-   message: "Ya posteaste una confesion, vuelve a postear en 1 hora"
+   message: "Ya posteaste una confesion, vuelve a postear en 5 minutos"
 });
 
 router.get('/', function(req, res) {
