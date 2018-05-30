@@ -4,21 +4,21 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mysql= require('mysql');
+var mysql = require('mysql');
 var http = require('http');
 var Raven = require('raven');
 var minify = require('express-minify');
 var cache = require('memory-cache');
 var compression = require('compression')
-const auth = require('http-auth');
-
-const basic = auth.basic({realm: 'Area Monitoreo'}, function(user, pass, callback) {
-  callback(user === 'confesiones' && pass === '####');
-});
-
 var index = require('./routes/index');
 var confesiones = require('./routes/confesiones');
 var app = express();
+const auth = require('http-auth');
+const basic = auth.basic({
+  realm: 'Area Monitoreo'
+}, function(user, pass, callback) {
+  callback(user === 'confesiones' && pass === '####');
+});
 
 Raven.config('https://dcac80ecd65347549f6f246b1de6240a@sentry.io/1215621').install();
 app.use(Raven.requestHandler());
@@ -29,35 +29,41 @@ app.use(minify());
 // Rates
 app.enable('trust proxy');
 
-const statusMonitor = require('express-status-monitor')({ path: '' });
+const statusMonitor = require('express-status-monitor')({
+  path: ''
+});
 app.use(statusMonitor.middleware);
 app.get('/status', auth.connect(basic), statusMonitor.pageRoute);
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next){
-	global.connection = mysql.createConnection({
-	  	host     : '138.122.227.11',
-	  	user     : 'replica',
-			password : '13251325CD',
-  		database : 'confesiones'
-	});
-	connection.connect();
+app.use(function(req, res, next) {
+  global.connection = mysql.createConnection({
+    host: '138.122.227.11',
+    user: 'replica',
+    password: '13251325CD',
+    database: 'confesiones'
+  });
+  connection.connect();
   connection.on('error', function(error) {
     Raven.captureException(error)
-    res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
+    res.send(JSON.stringify({
+      "status": 500,
+      "error": error,
+      "response": null
+    }));
   });
-	next();
+  next();
 });
 
 app.use('/', index);
@@ -83,26 +89,34 @@ app.use(function(err, req, res) {
 
 module.exports = app;
 var server = http.createServer(app);
-server.listen(4001);
+server.listen(8080);
 
 // Cache
 global.connection = mysql.createConnection({
-		host     : '138.122.227.11',
-		user     : 'replica',
-		password : '13251325CD',
-		database : 'confesiones'
+  host: '138.122.227.11',
+  user: 'replica',
+  password: '13251325CD',
+  database: 'confesiones'
 });
 connection.connect();
 setInterval(function() {
-	try {
-		connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
-				if(error){
-					Raven.captureException(error);
-				} else {
-					cache.put('CacheConfesiones', results);
-				}
-		});
-	}catch (error) {
-		Raven.captureException(error)
-	}
+  try {
+    connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
+      if (error) {
+        Raven.captureException(error);
+      } else {
+        cache.put('CacheConfesiones', results);
+      }
+    });
+    connection.end();
+  } catch (error) {
+    Raven.captureException(error)
+  }
 }, 5000);
+
+// Cerrar MySQL
+process.on('SIGINT', function() {
+   connection.end(function(err) {
+     process.exit(err ? 1 : 0);
+   });
+});
