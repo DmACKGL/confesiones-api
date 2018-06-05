@@ -40,6 +40,20 @@ setInterval(function() {
   loadConfesiones()
 }, 2000);
 
+// Reacciones
+function reaccionar(idconf, reaccion){
+  console.log(idconf+" "+reaccion);
+  //$.post( "/api/v1/reaccion", {"id": idconf, "reaccion": reaccion} );
+  $.ajax({
+    type: "POST",
+    url: "/api/v1/reaccion",
+    data: "id="+idconf+"&reaccion="+reaccion,
+    success: function(data){
+
+    }
+  });
+}
+
 // Form
 var $button = $('button[type="submit"]');
 

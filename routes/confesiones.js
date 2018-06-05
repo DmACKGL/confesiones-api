@@ -37,7 +37,7 @@ router.post('/', postconfe, function(req, res) {
 			} else {
 				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
 				try {
-					connection.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
+					connection.query('SELECT titulo, confesiones, fecha FROM confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
 							if(error){
 								Raven.captureException(error);
 							} else {

@@ -12,6 +12,7 @@ var cache = require('memory-cache');
 var compression = require('compression')
 var index = require('./routes/index');
 var confesiones = require('./routes/confesiones');
+var reacciones =  require('./routes/reacciones');
 var app = express();
 const auth = require('http-auth');
 const basic = auth.basic({
@@ -68,6 +69,7 @@ app.use(function(req, res, next) {
 
 app.use('/', index);
 app.use('/api/v1/confesiones', confesiones);
+app.use('/api/v1/reaccion', reacciones)
 
 // 404
 app.use(function(req, res, next) {
@@ -101,7 +103,7 @@ global.connectioncache = mysql.createConnection({
 connectioncache.connect();
 setInterval(function() {
   try {
-    connectioncache.query('SELECT * from confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
+    connectioncache.query('SELECT `id`, `titulo`, `confesion`, `fecha` FROM confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
       if (error) {
         Raven.captureException(error);
       } else {
