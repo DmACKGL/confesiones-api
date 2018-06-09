@@ -100,6 +100,12 @@ global.connectioncache = mysql.createConnection({
   password: '13251325CD',
   database: 'confesiones'
 });
+
+/**
+ @author Franco Sanllehi
+ @package Confesiones
+ @license apache-2
+*/
 connectioncache.connect();
 setInterval(function() {
   try {
