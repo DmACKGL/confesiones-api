@@ -123,7 +123,7 @@ setInterval(function() {
 
 // Cerrar MySQL
 process.on('SIGINT', function() {
-   connection.end(function(err) {
+   connectioncache.end(function(err) {
      process.exit(err ? 1 : 0);
    });
 });
