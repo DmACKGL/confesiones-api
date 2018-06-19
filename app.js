@@ -50,9 +50,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
   global.connection = mysql.createConnection({
-    host: '138.122.227.11',
-    user: 'replica',
-    password: '13251325CD',
+    host: 'main.confiesalo.tk',
+    user: 'confesiones',
+    password: 'LWjRne88mI1brrh6',
     database: 'confesiones'
   });
   connection.connect();
@@ -95,9 +95,9 @@ server.listen(8080);
 
 // Cache
 global.connectioncache = mysql.createConnection({
-  host: '138.122.227.11',
-  user: 'replica',
-  password: '13251325CD',
+  host: 'main.confiesalo.tk',
+  user: 'confesiones',
+  password: 'LWjRne88mI1brrh6',
   database: 'confesiones'
 });
 
