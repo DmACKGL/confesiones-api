@@ -17,8 +17,8 @@ router.post('/', function(req, res) {
   try{
     connection.query("INSERT INTO `reacciones` (`id`, `idconf`, `reaccion`, `ip`) SELECT NULL, '"+str.id+"', '"+str.reaccion+"', '"+ip+"' FROM dual WHERE NOT EXISTS (SELECT * FROM `reacciones` WHERE idconf='"+str.id+"' AND ip='"+ip+"')", function (error, results) {
       if(error){
-        Raven.captureException(error);
         res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
+        Raven.captureException(error);
       } else {
         res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
       }
