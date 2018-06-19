@@ -13,17 +13,10 @@ var postconfe = new RateLimit({
 });
 
 router.get('/', function(req, res) {
-	try {
-		results = cache.get('CacheConfesiones');
-		res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-	}catch (error) {
-		Raven.captureException(error)
-    res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
-  }
-
+	res.send("Sin datos");
 });
 
-router.post('/', postconfe, function(req, res) {
+router.post('/', function(req, res) {
 	// Vacio
 	if(Object.keys(req.body).length === 0 || !req.body.titulo || !req.body.confesion) {
   	res.send(JSON.stringify({"status": 500, "error": "Sin datos", "response": null}));
@@ -36,17 +29,6 @@ router.post('/', postconfe, function(req, res) {
 				res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
 			} else {
 				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-				try {
-					connection.query('SELECT titulo, confesiones, fecha FROM confesiones ORDER BY `confesiones`.`id` DESC', function (error, results) {
-							if(error){
-								Raven.captureException(error);
-							} else {
-								cache.put('CacheConfesiones', results);
-							}
-					});
-				}catch (error) {
-					Raven.captureException(error)
-				}
 			}
 		});
 	}catch (error) {

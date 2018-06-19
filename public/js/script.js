@@ -6,17 +6,17 @@
 
 function updateConfesiones(confesionesData) {
     $('#contenido').html('');
-    for (key in confesionesData['response']) {
+    for (key in confesionesData) {
         var htmlFinal = "";
         htmlFinal += '<div class="col-sm-6">';
         htmlFinal += ' <div class="card">';
         htmlFinal += '  <div class="card-body">';
-        htmlFinal += '   <h5 class="card-title">'+confesionesData['response'][key]['titulo']+'</h5>';
-        htmlFinal += '   <p class="card-text">'+confesionesData['response'][key]['confesion']+'</p>';
-        htmlFinal += '   <button onclick="reaccionar('+confesionesData['response'][key]['id']+', 1)" class="btn btn-outline-secondary"><i class="em em-laughing"></i></button>';
-        htmlFinal += '   <button onclick="reaccionar('+confesionesData['response'][key]['id']+', 2)" class="btn btn-outline-secondary"><i class="em em-anguished"></i></button>';
-        htmlFinal += '   <button onclick="reaccionar('+confesionesData['response'][key]['id']+', 3)" class="btn btn-outline-secondary"><i class="em em-cry"></i></button>';
-        htmlFinal += '   <button onclick="comentar('+confesionesData['response'][key]['id']+')" class="btn btn-outline-primary float-right"><i class="far fa-comments"></i></button>'
+        htmlFinal += '   <h5 class="card-title">'+confesionesData[key]['titulo']+'</h5>';
+        htmlFinal += '   <p class="card-text">'+confesionesData[key]['confesion']+'</p>';
+        htmlFinal += '   <button onclick="reaccionar('+confesionesData[key]['id']+', 1)" class="btn btn-outline-secondary"><i class="em em-laughing"></i></button>';
+        htmlFinal += '   <button onclick="reaccionar('+confesionesData[key]['id']+', 2)" class="btn btn-outline-secondary"><i class="em em-anguished"></i></button>';
+        htmlFinal += '   <button onclick="reaccionar('+confesionesData[key]['id']+', 3)" class="btn btn-outline-secondary"><i class="em em-cry"></i></button>';
+        htmlFinal += '   <button onclick="comentar('+confesionesData[key]['id']+')" class="btn btn-outline-primary float-right"><i class="far fa-comments"></i></button>'
         htmlFinal += '  </div>';
         htmlFinal += ' </div>';
         htmlFinal += '</div>';
@@ -27,7 +27,7 @@ function updateConfesiones(confesionesData) {
 function loadConfesiones() {
   $.ajax({
     cache: false,
-    url: "/api/v1/confesiones",
+    url: "https://api.confiesalo.tk/api/confesiones?_sort=-id",
     dataType: "json",
     success: function (confesionesData) {
       updateConfesiones(confesionesData);
@@ -43,10 +43,9 @@ setInterval(function() {
 // Reacciones
 function reaccionar(idconf, reaccion){
   console.log(idconf+" "+reaccion);
-  //$.post( "/api/v1/reaccion", {"id": idconf, "reaccion": reaccion} );
   $.ajax({
     type: "POST",
-    url: "/api/v1/reaccion",
+    url: "https://api.confiesalo.tk/api/v1/reaccion",
     data: "id="+idconf+"&reaccion="+reaccion,
     success: function(data){
 
@@ -69,7 +68,7 @@ $button.on('click', function(e) {
 	}, 130);
   $.ajax({
     type: "POST",
-    url: "/api/v1/confesiones",
+    url: "https://api.confiesalo.tk/api/v1/confesiones",
     data: $("form").serialize(),
     success: function(data){
       setTimeout(function() {

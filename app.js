@@ -92,38 +92,3 @@ app.use(function(err, req, res) {
 module.exports = app;
 var server = http.createServer(app);
 server.listen(8080);
-
-// Cache
-global.connectioncache = mysql.createConnection({
-  host: 'main.confiesalo.tk',
-  user: 'confesiones',
-  password: 'LWjRne88mI1brrh6',
-  database: 'confesiones'
-});
-
-/**
- @author Franco Sanllehi
- @package Confesiones
- @license apache-2
-*/
-connectioncache.connect();
-setInterval(function() {
-  try {
-    connectioncache.query('SELECT `id`, `titulo`, `confesion`, `fecha` FROM confesiones ORDER BY `confesiones`.`id` DESC', function(error, results) {
-      if (error) {
-        Raven.captureException(error);
-      } else {
-        cache.put('CacheConfesiones', results);
-      }
-    });
-  } catch (error) {
-    Raven.captureException(error)
-  }
-}, 5000);
-
-// Cerrar MySQL
-process.on('SIGINT', function() {
-   connectioncache.end(function(err) {
-     process.exit(err ? 1 : 0);
-   });
-});
