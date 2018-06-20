@@ -70,7 +70,7 @@ $button.on('click', function(e) {
     type: "POST",
     url: "https://api.confiesalo.tk/api/v1/confesiones",
     data: $("form").serialize(),
-    success: function(data){
+    complete: function(data){
       setTimeout(function() {
     		$this.removeClass('loader active');
     		$this.html('Posteado');

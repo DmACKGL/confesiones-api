@@ -27,7 +27,7 @@
               <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Eliminar</a>
+              <a class="nav-link" data-toggle="modal" data-target="#eliminarModal" href="#">Eliminar</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Terminos</a>
@@ -42,6 +42,7 @@
       <div class="row justify-content-center">
         <button type="button" class="btn btn-outline-primary text-center" data-toggle="modal" data-target="#confesarModal" ><i class="fas fa-pencil-alt"></i> Confesar</button>
       </div>
+      <!-- Modal Confesar -->
       <div class="modal fade" id="confesarModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         	<div class="modal-content">
@@ -69,6 +70,32 @@
         	</div>
         </div>
       </div>
+      <!-- /Modal Confesar -->
+      <!-- Modal Eliminar -->
+      <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        	<div class="modal-content">
+        		<div class="modal-header">
+        			<h5 class="modal-title">Eliminar Confesion</h5>
+        			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        			<span aria-hidden="true">&times;</span>
+        			</button>
+        		</div>
+            <form id="confesar-eliminar">
+          		<div class="modal-body">
+        				<div class="form-group">
+        					<label for="recipient-name" class="col-form-label">Ingresa la llave proporcionada al confesar:</label>
+        					<input type="text" name="titulo" class="form-control" disabled id="confesion-id">
+        				</div>
+          		</div>
+          		<div class="modal-footer">
+          			<button type="submit">Confesar</button>
+          		</div>
+            </form>
+        	</div>
+        </div>
+      </div>
+      <!-- /Modal Eliminar -->
       </br>
       <div class="row" id="contenido">
       </div>

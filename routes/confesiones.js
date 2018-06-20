@@ -24,7 +24,7 @@ router.post('/', function(req, res) {
 		return false;
 	}
 	try{
-		connection.query("INSERT INTO `confesiones` (`id`, `titulo`, `confesion`, `fecha`, `ip`) VALUES (NULL, '"+req.body.titulo+"', '"+req.body.confesion+"', CURRENT_TIME(), '"+ip+"')", function (error, results) {
+		connection.query("INSERT INTO `confesiones` (`id`, `titulo`, `confesion`, `fecha`) VALUES (NULL, '"+req.body.titulo+"', '"+req.body.confesion+"', CURRENT_TIME());", function (error, results) {
 			if(error){
 				res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
 				Raven.captureException(error);
